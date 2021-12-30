@@ -7,6 +7,8 @@ const methodOverride = require("method-override");
 
 const Animal = require("./models/animal");
 const Shelter = require("./models/shelter");
+const catchAsync = require("./utils/catchAsync");
+const ExpressError = require("./utils/ExpressError");
 
 mongoose.connect("mongodb://localhost:27017/animal-shelter");
 
@@ -37,8 +39,9 @@ app.get("/shelters/new", (req, res) => {
   res.render("animals/new-shelter");
 });
 
-app.post("/shelters", async (req, res, next) => {
-  try {
+app.post(
+  "/shelters",
+  catchAsync(async (req, res, next) => {
     const { name, country, city, street, email } = req.body;
     const newShelter = new Shelter({
       name: name,
@@ -51,24 +54,29 @@ app.post("/shelters", async (req, res, next) => {
     });
     await newShelter.save();
     res.redirect("/shelters");
-  } catch (e) {
-    next(e);
-  }
-});
+  })
+);
 
-app.get("/shelters/:id", async (req, res) => {
-  const { id } = req.params;
-  const shelter = await Shelter.findById(id);
-  res.render("animals/shelter", { shelter });
-});
+app.get(
+  "/shelters/:id",
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const shelter = await Shelter.findById(id);
+    res.render("animals/shelter", { shelter });
+  })
+);
 
-app.get("/shelters/:id/edit", async (req, res) => {
-  const shelter = await Shelter.findById(req.params.id);
-  res.render("animals/edit-shelter", { shelter });
-});
+app.get(
+  "/shelters/:id/edit",
+  catchAsync(async (req, res) => {
+    const shelter = await Shelter.findById(req.params.id);
+    res.render("animals/edit-shelter", { shelter });
+  })
+);
 
-app.put("/shelters/:id", async (req, res, next) => {
-  try {
+app.put(
+  "/shelters/:id",
+  catchAsync(async (req, res, next) => {
     const { name, country, city, street, email } = req.body;
     const id = req.params.id;
     const editedShelter = await Shelter.findByIdAndUpdate(
@@ -85,20 +93,17 @@ app.put("/shelters/:id", async (req, res, next) => {
       { new: true, runValidators: true }
     );
     res.redirect(`/shelters/${id}`);
-  } catch (e) {
-    next(e);
-  }
-});
+  })
+);
 
-app.delete("/shelters/:id", async (req, res, next) => {
-  try {
+app.delete(
+  "/shelters/:id",
+  catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const deletedShelter = await Shelter.findByIdAndDelete(id);
     res.redirect("/shelters");
-  } catch (e) {
-    next(e);
-  }
-});
+  })
+);
 
 app.get("/animals", async (req, res) => {
   const animals = await Animal.find({});
@@ -109,9 +114,11 @@ app.get("/animals/new", (req, res) => {
   res.render("animals/new-animal");
 });
 
-app.post("/animals", async (req, res, next) => {
-  try {
+app.post(
+  "/animals",
+  catchAsync(async (req, res, next) => {
     const { name, years, months, image } = req.body;
+    console.log(req.body);
     const newAnimal = new Animal({
       name: name,
       age: {
@@ -122,18 +129,20 @@ app.post("/animals", async (req, res, next) => {
     });
     await newAnimal.save();
     res.redirect(`/animals/${newAnimal._id}`);
-  } catch (e) {
-    next(e);
-  }
-});
+  })
+);
 
-app.get("/animals/:id/edit", async (req, res) => {
-  const animal = await Animal.findById(req.params.id);
-  res.render("animals/edit-animal", { animal });
-});
+app.get(
+  "/animals/:id/edit",
+  catchAsync(async (req, res) => {
+    const animal = await Animal.findById(req.params.id);
+    res.render("animals/edit-animal", { animal });
+  })
+);
 
-app.put("/animals/:id", async (req, res, next) => {
-  try {
+app.put(
+  "/animals/:id",
+  catchAsync(async (req, res, next) => {
     const { name, years, months, image } = req.body;
     const id = req.params.id;
     const editedShelter = await Animal.findByIdAndUpdate(
@@ -149,19 +158,36 @@ app.put("/animals/:id", async (req, res, next) => {
       { new: true, runValidators: true }
     );
     res.redirect(`/animals/${id}`);
-  } catch (e) {
-    next(e);
-  }
+  })
+);
+
+app.delete(
+  "/animals/:id",
+  catchAsync(async (req, res) => {
+    await Animal.findByIdAndDelete(req.params.id);
+    res.redirect("/animals");
+  })
+);
+
+app.get(
+  "/animals/:id",
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const animal = await Animal.findById(id);
+    res.render("animals/animal", { animal });
+  })
+);
+
+// takes all wrong url, 404 not found
+app.all("*", (req, res, next) => {
+  next(new ExpressError("Pagen not found ;(", 404));
 });
 
-app.get("/animals/:id", async (req, res) => {
-  const { id } = req.params;
-  const animal = await Animal.findById(id);
-  res.render("animals/animal", { animal });
-});
-
+// catch all errors
 app.use((err, req, res, next) => {
-  res.send("Error");
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = "Oh no! We have a problem!";
+  res.status(statusCode).render("error", { err });
 });
 
 app.listen(3000, () => {
