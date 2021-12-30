@@ -1,0 +1,21 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="col-6 offset-3 mb-5">
+  <h1><%= shelter.name %></h1>
+  <h3>
+    <%= shelter.address.street %>, <%= shelter.address.city %> in
+    <%=shelter.address.country %>
+  </h3>
+  <a class="btn btn-info mt-5" href="/shelters/<%= shelter._id %>/edit "
+    >Edit</a
+  >
+  <form
+    class="d-inline"
+    method="POST"
+    action="/shelters/<%= shelter._id %>?_method=DELETE"
+  >
+    <button class="btn btn-danger mt-5">Delete</button>
+  </form>
+  <br />
+  <a class="btn btn-warning mt-5" href="/shelters">back</a>
+</div>

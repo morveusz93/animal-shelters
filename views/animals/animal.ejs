@@ -1,0 +1,22 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="col-6 offset-3 mb-5">
+  <h1><%= animal.name %></h1>
+  <h3>
+    Age: <%= animal.age.years %> years and <%= animal.age.months %> months
+  </h3>
+  <img width="300px" src="<%= animal.image %> " alt="animal photo" />
+  <div>
+    <a class="btn btn-info mt-5" href="/animals/<%= animal._id %>/edit "
+      >Edit</a
+    >
+    <form
+      class="d-inline"
+      method="POST"
+      action="/animals/<%= animal._id %>?_method=DELETE"
+    >
+      <button class="btn btn-danger mt-5">Delete</button>
+    </form>
+  </div>
+  <a class="btn btn-warning mt-5" href="/animals">back</a>
+</div>

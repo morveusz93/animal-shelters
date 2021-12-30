@@ -1,0 +1,77 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="col-6 offset-3 mb-5">
+  <h1><%= shelter.name %></h1>
+  <h2>EDIT:</h2>
+  <form
+    novalidate
+    class="mt-5 needs-validation"
+    method="POST"
+    action="/shelters/<%= shelter._id %>/?_method=PUT "
+  >
+    <div class="mb-3">
+      <label for="name" class="form-label">Shelter's name:</label>
+      <input
+        required
+        type="text"
+        name="name"
+        class="form-control"
+        id="name"
+        placeholder="name"
+        value="<%= shelter.name %>"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="country" class="form-label">Country</label>
+      <input
+        required
+        type="text"
+        class="form-control"
+        id="country"
+        placeholder="country"
+        name="country"
+        value="<%= shelter.address.country %>"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="city" class="form-label">City:</label>
+      <input
+        required
+        type="text"
+        class="form-control"
+        id="city"
+        placeholder="city"
+        name="city"
+        value="<%= shelter.address.city %>"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="street" class="form-label">Street:</label>
+      <input
+        required
+        type="text"
+        class="form-control"
+        id="street"
+        placeholder="street"
+        name="street"
+        value="<%= shelter.address.street %>"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Your email:</label>
+      <input
+        required
+        type="email"
+        class="form-control"
+        id="email"
+        placeholder="email"
+        name="email"
+        value="<%= shelter.email %>"
+      />
+    </div>
+    <button type="submit" class="btn btn-info mt-5 mb-1">
+      Edit this shelter
+    </button>
+  </form>
+  <a class="btn btn-warning mb-3" href="/shelters/<%= shelter._id %> ">back</a>
+</div>

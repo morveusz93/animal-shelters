@@ -1,0 +1,69 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="col-6 offset-3 mb-5">
+  <h1>Add new animal to your shelter</h1>
+  <form
+    class="mt-5 needs-validation"
+    novalidate
+    method="POST"
+    action="/animals"
+  >
+    <div class="mb-3">
+      <label for="name" class="form-label">Name:</label>
+      <input
+        required
+        type="text"
+        name="name"
+        class="form-control"
+        id="name"
+        placeholder="name"
+      />
+      <div class="invalid-feedback">Please insert a name.</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <label for="years" class="form-label">Years:</label>
+        <input
+          required
+          min="0"
+          type="number"
+          class="form-control"
+          id="years"
+          placeholder="years"
+          name="years"
+        />
+        <div class="invalid-feedback">Please insert a valid age</div>
+      </div>
+      <div class="col-3">
+        <label for="months" class="form-label">Months:</label>
+        <input
+          required
+          type="number"
+          min="0"
+          max="11"
+          class="form-control"
+          id="months"
+          placeholder="months"
+          name="months"
+        />
+        <div class="invalid-feedback">Please insert a valid age</div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="image" class="form-label">Photo URL</label>
+      <input
+        required
+        type="url"
+        class="form-control"
+        id="image"
+        placeholder="image"
+        name="image"
+      />
+      <div class="invalid-feedback">Please insert an URL to photo.</div>
+    </div>
+
+    <button type="submit" class="btn btn-dark">Submit</button>
+  </form>
+  <a class="btn btn-warning" href="/shelters">back</a>
+</div>

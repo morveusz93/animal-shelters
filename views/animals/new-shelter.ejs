@@ -1,0 +1,74 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="col-6 offset-3 mb-5">
+  <h1>Add new animal shelter</h1>
+  <form
+    class="mt-5 needs-validation"
+    novalidate
+    method="POST"
+    action="/shelters"
+  >
+    <div class="mb-3">
+      <label for="name" class="form-label">Shelter's name:</label>
+      <input
+        required
+        type="text"
+        name="name"
+        class="form-control"
+        id="name"
+        placeholder="name"
+      />
+      <div class="invalid-feedback">Please insert a shelter name.</div>
+    </div>
+    <div class="mb-3">
+      <label for="country" class="form-label">Country</label>
+      <input
+        required
+        type="text"
+        class="form-control"
+        id="country"
+        placeholder="country"
+        name="country"
+      />
+      <div class="invalid-feedback">Please insert a country.</div>
+    </div>
+    <div class="mb-3">
+      <label for="city" class="form-label">City:</label>
+      <input
+        required
+        type="text"
+        class="form-control"
+        id="city"
+        placeholder="city"
+        name="city"
+      />
+      <div class="invalid-feedback">Please insert a city.</div>
+    </div>
+    <div class="mb-3">
+      <label for="street" class="form-label">Street:</label>
+      <input
+        required
+        type="text"
+        class="form-control"
+        id="street"
+        placeholder="street"
+        name="street"
+      />
+      <div class="invalid-feedback">Please insert a street name.</div>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Your email:</label>
+      <input
+        required
+        type="email"
+        class="form-control"
+        id="email"
+        placeholder="email"
+        name="email"
+      />
+      <div class="invalid-feedback">Please insert an email.</div>
+    </div>
+    <button type="submit" class="btn btn-dark">Submit</button>
+  </form>
+  <a class="btn btn-warning" href="/shelters">back</a>
+</div>
