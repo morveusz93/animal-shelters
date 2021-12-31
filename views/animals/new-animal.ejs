@@ -50,6 +50,15 @@
       </div>
     </div>
 
+    <div class="mb-3 col-3">
+      <label for="type" class="form-label">Type:</label>
+      <select class="form-select" name="type" id="type">
+        <% for( type of animalTypes ) { %>
+        <option value="<%= type %>"><%= type %></option>
+        <% } %>
+      </select>
+    </div>
+
     <div class="mb-3">
       <label for="image" class="form-label">Photo URL</label>
       <input
@@ -65,5 +74,5 @@
 
     <button type="submit" class="btn btn-dark">Submit</button>
   </form>
-  <a class="btn btn-warning" href="/shelters">back</a>
+  <a class="btn btn-warning mt-5" href="/shelters">back</a>
 </div>

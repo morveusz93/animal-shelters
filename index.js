@@ -11,6 +11,8 @@ const Shelter = require("./models/shelter");
 const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/ExpressError");
 const { animalSchema } = require("./validationSchemas");
+const animalTypes = Animal.schema.path("type").enumValues;
+
 mongoose.connect("mongodb://localhost:27017/animal-shelter");
 
 const db = mongoose.connection;
@@ -123,20 +125,21 @@ app.get("/animals", async (req, res) => {
 });
 
 app.get("/animals/new", (req, res) => {
-  res.render("animals/new-animal");
+  res.render("animals/new-animal", { animalTypes });
 });
 
 app.post(
   "/animals",
   validateAnimal,
   catchAsync(async (req, res, next) => {
-    const { name, years, months, image } = req.body;
+    const { name, years, months, image, type } = req.body;
     const newAnimal = new Animal({
       name: name,
       age: {
         years: years,
         months: months,
       },
+      type: type,
       image: image,
     });
     await newAnimal.save();
@@ -148,7 +151,7 @@ app.get(
   "/animals/:id/edit",
   catchAsync(async (req, res) => {
     const animal = await Animal.findById(req.params.id);
-    res.render("animals/edit-animal", { animal });
+    res.render("animals/edit-animal", { animal, animalTypes });
   })
 );
 
@@ -156,7 +159,7 @@ app.put(
   "/animals/:id",
   validateAnimal,
   catchAsync(async (req, res, next) => {
-    const { name, years, months, image } = req.body;
+    const { name, years, months, image, type } = req.body;
     const id = req.params.id;
     const editedShelter = await Animal.findByIdAndUpdate(
       id,
@@ -167,6 +170,7 @@ app.put(
           months: months,
         },
         image: image,
+        type: type,
       },
       { new: true, runValidators: true }
     );

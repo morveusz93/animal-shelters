@@ -23,12 +23,12 @@ const seedDBAnimals = async () => {
     const newAnimal = new Animal({
       name: sample(names),
       age: { years: randomYear, months: randomMonth },
+      type: "cat",
       image: imgUrl,
     });
     await newAnimal.save();
   }
 };
-
 
 const seedDBShelters = async () => {
   await Shelter.deleteMany({});
@@ -79,10 +79,9 @@ const seedDBShelters = async () => {
     });
 };
 
-// seedDBAnimals().then(() => {
-//   mongoose.connection.close();
-//   console.log("created animals");
-// });
-
+seedDBAnimals().then(() => {
+  mongoose.connection.close();
+  console.log("created animals");
+});
 
 // seedDBShelters();
