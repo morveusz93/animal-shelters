@@ -1,12 +1,13 @@
 <% layout("layouts/boilerplate") %>
 
 <div class="col-6 offset-3 mb-5">
-  <h1>Add new animal to your shelter</h1>
+  <h1 class="mb-4"><%= shelter.name %></h1>
+  <h2>Add new animal to your shelter</h2>
   <form
     class="mt-5 needs-validation"
     novalidate
     method="POST"
-    action="/animals"
+    action="/shelters/<%= shelter._id %>/animals "
   >
     <div class="mb-3">
       <label for="name" class="form-label">Name:</label>
@@ -53,7 +54,7 @@
     <div class="mb-3 col-3">
       <label for="type" class="form-label">Type:</label>
       <select class="form-select" name="type" id="type">
-        <% for( type of animalTypes ) { %>
+        <% for( let type of animalTypes ) { %>
         <option value="<%= type %>"><%= type %></option>
         <% } %>
       </select>
@@ -72,7 +73,7 @@
       <div class="invalid-feedback">Please insert an URL to photo.</div>
     </div>
 
-    <button type="submit" class="btn btn-dark">Submit</button>
+    <button type="submit" class="btn btn-success">Submit</button>
   </form>
-  <a class="btn btn-warning mt-5" href="/shelters">back</a>
+  <a class="btn btn-warning mt-5" href="/shelters/<%= shelter._id %> ">back</a>
 </div>

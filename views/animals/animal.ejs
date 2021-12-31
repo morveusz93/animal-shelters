@@ -6,6 +6,9 @@
   <h3>
     Age: <%= animal.age.years %> years and <%= animal.age.months %> months
   </h3>
+  <h3>
+    Shelter: <%= animal.shelter.name %> in <%= animal.shelter.address.city %>
+  </h3>
   <img width="300px" src="<%= animal.image %> " alt="animal photo" />
   <div>
     <a class="btn btn-info mt-5" href="/animals/<%= animal._id %>/edit "
@@ -19,5 +22,10 @@
       <button class="btn btn-danger mt-5">Delete</button>
     </form>
   </div>
-  <a class="btn btn-warning mt-5" href="/animals">back</a>
+  <a class="btn btn-warning mt-5" href="/animals">All animals</a>
+  <% if (animal.shelter) { %>
+  <a class="btn btn-warning mt-5" href="/shelters/<%= animal.shelter._id %> "
+    >This shelter</a
+  >
+  <% } %>
 </div>

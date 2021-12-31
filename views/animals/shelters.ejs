@@ -5,7 +5,9 @@
   <ul class="list-group">
     <% for( shelter of shelters ) { %>
     <li class="list-group-item">
-      <a href="/shelters/<%= shelter._id %> "><%= shelter.name %></a>
+      <a href="/shelters/<%= shelter._id %> "
+        ><%= shelter.name %> - <%= shelter.address.city %>
+      </a>
     </li>
     <% } %>
   </ul>

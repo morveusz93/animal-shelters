@@ -44,6 +44,8 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
+// ----------------------------- SHELTERS -----------------------------
+
 app.get("/shelters", async (req, res) => {
   const shelters = await Shelter.find({});
   res.render("animals/shelters", { shelters });
@@ -75,7 +77,7 @@ app.get(
   "/shelters/:id",
   catchAsync(async (req, res) => {
     const { id } = req.params;
-    const shelter = await Shelter.findById(id);
+    const shelter = await Shelter.findById(id).populate("animals");
     res.render("animals/shelter", { shelter });
   })
 );
@@ -119,20 +121,24 @@ app.delete(
   })
 );
 
+// ----------------------------- ANIMALS -----------------------------
+
 app.get("/animals", async (req, res) => {
   const animals = await Animal.find({});
   res.render("animals/animals", { animals });
 });
 
-app.get("/animals/new", (req, res) => {
-  res.render("animals/new-animal", { animalTypes });
+app.get("/shelters/:shelterID/animals/new", async (req, res) => {
+  const shelter = await Shelter.findById(req.params.shelterID);
+  res.render("animals/new-animal", { shelter, animalTypes });
 });
 
 app.post(
-  "/animals",
+  "/shelters/:shelterID/animals",
   validateAnimal,
   catchAsync(async (req, res, next) => {
     const { name, years, months, image, type } = req.body;
+    const shelter = await Shelter.findById(req.params.shelterID);
     const newAnimal = new Animal({
       name: name,
       age: {
@@ -141,9 +147,21 @@ app.post(
       },
       type: type,
       image: image,
+      shelter: shelter,
     });
+    shelter.animals.push(newAnimal);
     await newAnimal.save();
-    res.redirect(`/animals/${newAnimal._id}`);
+    await shelter.save();
+    res.redirect(`/shelters/${shelter._id}`);
+  })
+);
+
+app.get(
+  "/animals/:id",
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const animal = await Animal.findById(id).populate("shelter");
+    res.render("animals/animal", { animal });
   })
 );
 
@@ -161,7 +179,7 @@ app.put(
   catchAsync(async (req, res, next) => {
     const { name, years, months, image, type } = req.body;
     const id = req.params.id;
-    const editedShelter = await Animal.findByIdAndUpdate(
+    const editedAnimal = await Animal.findByIdAndUpdate(
       id,
       {
         name: name,
@@ -186,14 +204,7 @@ app.delete(
   })
 );
 
-app.get(
-  "/animals/:id",
-  catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const animal = await Animal.findById(id);
-    res.render("animals/animal", { animal });
-  })
-);
+// // ----------------------------- ERRORS -----------------------------
 
 // takes all wrong url, 404 not found
 app.all("*", (req, res, next) => {

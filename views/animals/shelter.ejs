@@ -6,6 +6,21 @@
     <%= shelter.address.street %>, <%= shelter.address.city %> in
     <%=shelter.address.country %>
   </h3>
+  <div class="col-6 offset-3 text-center my-5">
+    <h3>Animals in this shelter:</h3>
+    <ul class="list-group">
+      <% for( let animal of shelter.animals ) { %>
+      <li class="list-group-item">
+        <a href="/animals/<%= animal._id %> "><%= animal.name %></a>
+      </li>
+      <% } %>
+    </ul>
+  </div>
+  <div>
+    <a class="btn btn-success" href="/shelters/<%= shelter._id %>/animals/new"
+      >Add new animal</a
+    >
+  </div>
   <a class="btn btn-info mt-5" href="/shelters/<%= shelter._id %>/edit "
     >Edit</a
   >
@@ -17,5 +32,5 @@
     <button class="btn btn-danger mt-5">Delete</button>
   </form>
   <br />
-  <a class="btn btn-warning mt-5" href="/shelters">back</a>
+  <a class="btn btn-warning mt-5" href="/shelters">All shelters</a>
 </div>

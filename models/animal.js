@@ -27,6 +27,11 @@ const animalSchema = new Schema({
       max: 11,
     },
   },
+  shelter: {
+    type: Schema.Types.ObjectId,
+    ref: "Shelter",
+    // required: true,
+  },
 });
 
 module.exports = mongoose.model("Animal", animalSchema);

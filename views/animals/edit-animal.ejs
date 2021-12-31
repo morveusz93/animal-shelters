@@ -57,7 +57,7 @@
     <div class="mb-3 col-3">
       <label for="type" class="form-label">Type:</label>
       <select class="form-select" name="type" id="type">
-        <% for( type of animalTypes ) { %> <% if (type === animal.type) { %>
+        <% for( let type of animalTypes ) { %> <% if (type === animal.type) { %>
         <option selected value="<%= type %>"><%= type %></option>
         <% } else { %>
 

@@ -16,17 +16,22 @@ const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
 const seedDBAnimals = async () => {
   await Animal.deleteMany({});
+  const allShelters = await Shelter.find({});
   for (let i = 0; i < 50; i++) {
     const randomYear = Math.floor(Math.random() * 16);
     const randomMonth = Math.floor(Math.random() * 12);
     const imgUrl = await animals.cat().catch((error) => console.error(error));
+    const shelter = sample(allShelters);
     const newAnimal = new Animal({
       name: sample(names),
+      shelter: shelter,
       age: { years: randomYear, months: randomMonth },
       type: "cat",
       image: imgUrl,
     });
+    shelter.animals.push(newAnimal);
     await newAnimal.save();
+    await shelter.save();
   }
 };
 
@@ -79,9 +84,9 @@ const seedDBShelters = async () => {
     });
 };
 
-seedDBAnimals().then(() => {
-  mongoose.connection.close();
-  console.log("created animals");
-});
-
 // seedDBShelters();
+
+// seedDBAnimals().then(() => {
+//   mongoose.connection.close();
+//   console.log("created animals");
+// });
