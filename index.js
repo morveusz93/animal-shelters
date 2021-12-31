@@ -4,12 +4,13 @@ const ejs = require("ejs");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
+const Joi = require("joi");
 
 const Animal = require("./models/animal");
 const Shelter = require("./models/shelter");
 const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/ExpressError");
-
+const { animalSchema } = require("./validationSchemas");
 mongoose.connect("mongodb://localhost:27017/animal-shelter");
 
 const db = mongoose.connection;
@@ -25,6 +26,17 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+
+const validateAnimal = (req, res, next) => {
+  const validationResult = animalSchema.validate(req.body);
+  const { error } = validationResult;
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
 
 app.get("/", (req, res) => {
   res.render("home");
@@ -116,9 +128,9 @@ app.get("/animals/new", (req, res) => {
 
 app.post(
   "/animals",
+  validateAnimal,
   catchAsync(async (req, res, next) => {
     const { name, years, months, image } = req.body;
-    console.log(req.body);
     const newAnimal = new Animal({
       name: name,
       age: {
@@ -142,6 +154,7 @@ app.get(
 
 app.put(
   "/animals/:id",
+  validateAnimal,
   catchAsync(async (req, res, next) => {
     const { name, years, months, image } = req.body;
     const id = req.params.id;
