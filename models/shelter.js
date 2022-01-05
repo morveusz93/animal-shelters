@@ -30,7 +30,6 @@ const shelterSchema = new Schema({
 });
 
 shelterSchema.post("findOneAndDelete", async function (shelter) {
-  console.log("in post middleware");
   if (shelter.animals.length) {
     const res = await Animal.deleteMany({ _id: { $in: shelter.animals } });
   }

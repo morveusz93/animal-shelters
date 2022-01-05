@@ -1,23 +1,42 @@
 <% layout("layouts/boilerplate") %>
 
-<div class="col-6 offset-3 mb-5">
+<div class="col-md-10 offset-md-1 text-center mb-5">
   <h1><%= shelter.name %></h1>
   <h3>
     <%= shelter.address.street %>, <%= shelter.address.city %> in
     <%=shelter.address.country %>
   </h3>
-  <div class="col-6 offset-3 text-center my-5">
+  <div>
     <h3>Animals in this shelter:</h3>
-    <ul class="list-group">
+
+    <div class="row">
       <% for( let animal of shelter.animals ) { %>
-      <li class="list-group-item">
-        <a href="/animals/<%= animal._id %> "><%= animal.name %></a>
-      </li>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="card my-1">
+          <img
+            height="200px"
+            src="<%= animal.image %> "
+            class="card-img-top"
+            alt="..."
+          />
+          <div class="card-body">
+            <h5 class="card-title"><%= animal.name %></h5>
+            <p class="card-text">
+              <%= animal.age.years %> years <%= animal.age.months %> months.
+            </p>
+            <a href="/animals/<%= animal._id %>" class="btn btn-primary"
+              >Details</a
+            >
+          </div>
+        </div>
+      </div>
       <% } %>
-    </ul>
+    </div>
   </div>
   <div>
-    <a class="btn btn-success" href="/shelters/<%= shelter._id %>/animals/new"
+    <a
+      class="btn btn-success mt-5"
+      href="/shelters/<%= shelter._id %>/animals/new"
       >Add new animal</a
     >
   </div>
